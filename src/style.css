@@ -1,0 +1,21 @@
+﻿ #back{
+    background: url("./img/arkaplan.jpg") no-repeat;
+    background-size: cover;   
+    float: "left";
+    background-Color: "#f4f4f4"
+}
+
+
+.row{
+    margin-right: 0;
+}
+
+.sideBarClass{
+    position: relative;
+    min-height: 100vh;
+    height: 100%;
+}
+
+.basvuruFormuClass{
+    padding: 50px;
+}
