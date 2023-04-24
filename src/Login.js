@@ -15,7 +15,7 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        try{
+        try {
 
             const response = await axios.post('http://localhost:3001/',
                 {
@@ -24,18 +24,19 @@ function Login() {
                 }
             );
 
-            if(response.status === 200){
-                if(response.data.message === "1"){
+            if (response.status === 200) {
+                if (response.data.message === "1") {
                     sessionStorage.setItem("id", response.data.id);
+                    sessionStorage.setItem("oturum", 1);
                     setSuccess('Giriş Başarili. Yonlendiriliyorsunuz...')
-                    setTimeout( () => {
-                    navigate('/portal');
-                }, 2000);  
-                }else{
-                setError('Kullanici adi veya sifre hatali.');
+                    setTimeout(() => {
+                        navigate('/portal');
+                    }, 2000);
+                } else {
+                    setError('Kullanici adi veya sifre hatali.');
                 }
             }
-        }catch(err){
+        } catch (err) {
             setError('Kullanici adi ve sifre kontrolünde hata olustu.');
         }
 
@@ -53,25 +54,27 @@ function Login() {
                 <div class="col-4">
                     <form onSubmit={handleSubmit}>
                         <div class="py-2 ">
-                        <input type="email"  class="form-control"
-                            placeholder="Mail adresiniz"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required />
-                            </div>
-                            <div class="py-2">
-                        <input type="password"  class="form-control"
-                            placeholder="Şifre"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required />
-                            </div>
-                        <button type="submit" class="w-100 btn btn-lg btn-primary">Login</button>
+                            <input type="email" class="form-control"
+                                placeholder="Mail adresiniz"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required />
+                        </div>
+                        <div class="py-2">
+                            <input type="password" class="form-control"
+                                placeholder="Şifre"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required />
+                        </div>
+                        <button type="submit" class="w-100 btn btn-lg btn-primary">Giriş</button>
                     </form>
 
                     {error && <p style={{ color: 'red' }}> {error} </p>}
                     {success && <p style={{ color: 'green' }}>{success}</p>}
-
+                    <p>
+                        Şifrenizi güncellemek ister misiniz? <Link style={{ color: "black" }} to="/password"><a href=''>Şifremi Güncelle</a></Link>
+                    </p>
                     <p>
                         Hesabınız yok mu? <Link to="/kayit">Kayıt Ol!</Link>
                     </p>

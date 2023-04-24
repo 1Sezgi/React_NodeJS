@@ -12,6 +12,7 @@ async function Signout(navigate){
         );
 
         if(response.status === 200){
+            sessionStorage.setItem("oturum", 0);
             navigate("/")
         }else{
             alert('Suan cikisinizi yapamiyoruz.');

@@ -4,6 +4,9 @@ import Register from './Register.js';
 import Portal from './Portal.js';
 import BasvuruFormu from './component/BasvuruFormu.js';
 import BasvuruGoruntule from './component/BasvuruGoruntule.js';
+import Password from './Password.js';
+import BasvuruGuncelle from './component/BasvuruGuncelle.js';
+
 
 
 function App() {
@@ -15,6 +18,8 @@ function App() {
         <Route path="/portal" element={<Portal />} />
         <Route path="/portal/BasvuruFormu" element={<BasvuruFormu/>} />
         <Route path="/portal/BasvuruGoruntule" element={<BasvuruGoruntule/>} />
+        <Route path="/password" element={<Password />} />
+        <Route path="/portal/BasvuruGuncelle" element={<BasvuruGuncelle/>} />
 
       </Routes>
     </Router>

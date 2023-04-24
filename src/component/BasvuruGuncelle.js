@@ -1,14 +1,49 @@
-﻿import React, { useState } from 'react';
-import Sidebar from './Sidebar.js';
+﻿import Sidebar from './Sidebar.js';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import style from '../style.css';
-import logo from '../img/khaslogo.png';
+import { Link } from 'react-router-dom';
+import { ImAirplane } from "react-icons/im";
 
-function BasvuruFormu() {
 
-    if (sessionStorage.getItem("oturum") != 1) {
-        document.location.href = "/";
-    }
+
+function Basvuruguncelle() {
+
+    const [bilgi, setBilgi] = useState('');
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+
+        const bilgiGetir = async () => {
+            const id = sessionStorage.getItem("id");
+
+            console.log(id);
+
+            try {
+
+                const response = await axios.post("http://localhost:3001/formGoster",
+                    { id }
+                );
+
+                if (response.status === 200) {
+                    setBilgi(response.data);
+                    console.log(response.data)
+                }
+
+            } catch (err) {
+                setError("Kullanici bilgileri gosterilemedi.");
+            }
+        }
+
+
+        bilgiGetir();
+
+    }, []);
+
+    const handleEngelChange = (e) => {
+        setDisability(e.target.value);
+    };
+
+
 
     const [isim, setIsim] = useState('');
     const [soyisim, setSoyisim] = useState('');
@@ -41,7 +76,6 @@ function BasvuruFormu() {
     const [telefon, setTelefon] = useState('');
     const [email, setEmail] = useState('');
 
-    const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
     const id = sessionStorage.getItem('id');
@@ -51,12 +85,12 @@ function BasvuruFormu() {
 
         try {
 
-            const response = await axios.post("http://localhost:3001/BasvuruFormuGonder", {
-                id, isim, soyisim, cinsiyet, tarih, milliyet, ikinciMilliyet, tcNo, disability, why, ulke, il, ilce, mahalle, sokak, apartno, zip, universite, fakulte, bolum, mezuniyet, mezuniyetTarih, not, cv, niyet, diploma, ingYetkin, ikametgah, pasaport, telefon, email
+            const response = await axios.post("http://localhost:3001/guncelle", {
+                id, soyisim, isim, cinsiyet, tarih, telefon, tcNo, ulke, milliyet, ikinciMilliyet, il, ilce, mahalle, sokak, apartno, zip, why, disability, universite, fakulte, bolum, mezuniyet, mezuniyetTarih, not, cv, niyet, diploma, ingYetkin, ikametgah, pasaport
             });
 
             if (response.status === 200) {
-                setSuccess('Başvurunuz Alındı!');
+                setSuccess('Güncelleme Yapıldı!');
                 setIsim('');
                 setSoyisim('');
                 setCinsiyet('');
@@ -91,7 +125,9 @@ function BasvuruFormu() {
 
                 setError('');
 
-            } else {
+
+            }
+            else {
                 setError(response.data.error);
             }
 
@@ -101,6 +137,8 @@ function BasvuruFormu() {
         }
     }
 
+
+
     return (
         <>
             <div className="row">
@@ -108,6 +146,7 @@ function BasvuruFormu() {
                     <Sidebar
                         form_active="active"
                         form_disable="disabled"
+                    // gor_to="/portal/BasvuruGoruntule"
                     />
                 </div>
                 <div className="col-10">
@@ -115,31 +154,32 @@ function BasvuruFormu() {
                         <form onSubmit={handleSubmit}>
                             <div className='row'>
                                 <div className='col-12'>
-                                    <h2>ERASMUS BASVURU FORMU</h2>
+                                    <h2>ERASMUS BASVURU FORMU GÜNCELLE</h2>
                                 </div>
                                 <div className='col-12'>
                                     <h4><label className="form-label form-label-left form-label-auto" id="adres" name="adres" for="adres"><b>Kişisel Bilgiler</b></label></h4><hr />
                                 </div>
-                                <div className='col-lg-4 '>
-                                    <label for="isim" style={{ minHeight: "13px", ariaHidden: "false" }}>Adınız</label>
-                                    <input type="text" className="form-control"
-                                        value={isim}
-                                        onChange={(e) => setIsim(e.target.value)}
-                                        required />
-                                </div><br />
                                 <div className='col-lg-4'>
-                                    <label for="soyisim" style={{ minHeight: "13px", ariaHidden: "false" }}>Soyadınız</label>
+                                    <label htmlFor="isim" style={{ minHeight: "13px", ariaHidden: "false" }}>Adınız</label>
                                     <input type="text" className="form-control"
-                                        value={soyisim}
-                                        onChange={(e) => setSoyisim(e.target.value)}
+                                        value={bilgi.isim}
+                                        onChange={(e) => setBilgi({ ...bilgi, isim: e.target.value })}
+                                        required />
+                                </div>
+                                <br />
+                                <div className='col-lg-4'>
+                                    <label htmlFor="soyisim" style={{ minHeight: "13px", ariaHidden: "false" }}>Soyadınız</label>
+                                    <input type="text" className="form-control"
+                                        value={bilgi.soyisim}
+                                        onChange={(e) => setBilgi({ ...bilgi, soyisim: e.target.value })}
                                         minLength="2"
                                         required /><br />
                                 </div>
                                 <div className='col-lg-4'>
-                                    <label className="form-sub-label" for="cins" style={{ minHeight: "13px", ariaHidden: "false" }} />
+                                    <label className="form-sub-label" htmlFor="cins" style={{ minHeight: "13px", ariaHidden: "false" }} />
                                     <select id="cins" name="cins" className="form-select" required
-                                        value={cinsiyet}
-                                        onChange={(e) => setCinsiyet(e.target.value)}>
+                                        value={bilgi.cinsiyet}
+                                        onChange={(e) => setBilgi({ ...bilgi, cinsiyet: e.target.value })}>
                                         <option hidden selected value="">Cinsiyet Seçiniz</option>
                                         <option value="Kadin">Kadın</option>
                                         <option value="Erkek">Erkek</option>
@@ -147,16 +187,17 @@ function BasvuruFormu() {
                                     </select><br />
                                 </div>
                                 <div className='col-4'>
-                                    <label for="tarih" style={{ minHeight: "13px", ariaHidden: "false" }}>Doğum Tarihiniz</label>
+                                    <label htmlFor="tarih" style={{ minHeight: "13px", ariaHidden: "false" }}>Doğum Tarihiniz</label>
                                     <input type="date" className="form-control" id="tarih" name="tarih" required
-                                        value={tarih}
-                                        onChange={(e) => setTarih(e.target.value)} /><br />
+                                       value={bilgi.tarih ? new Date(bilgi.tarih).toLocaleDateString('en-CA') : ""}
+                                        onChange={(e) => setBilgi({ ...bilgi, tarih: e.target.value })} /><br />
                                 </div>
+
                                 <div className='col-4'>
-                                    <label className="form-sub-label" for="milliyet" style={{ minHeight: "13px", ariaHidden: "false" }}>Milliyetiniz</label>
+                                    <label className="form-sub-label" htmlFor="milliyet" style={{ minHeight: "13px", ariaHidden: "false" }}>Milliyetiniz</label>
                                     <select id="milliyet" name="milliyet" className="form-select" required
-                                        value={milliyet}
-                                        onChange={(e) => setMilliyet(e.target.value)}>
+                                        value={bilgi.milliyet}
+                                        onChange={(e) => setBilgi({ ...bilgi, milliyet: e.target.value })}>
                                         <option value="">Lütfen Seçiniz</option>
                                         <option value="Türk" selected>Türk</option>
                                         <option value="Afgan">Afgan</option>
@@ -354,10 +395,10 @@ function BasvuruFormu() {
                                     </select><br />
                                 </div>
                                 <div className='col-lg-4'>
-                                    <label className="form-sub-label" for="ikincimilliyet" style={{ minHeight: "13px", ariaHidden: "false" }}>Varsa İkinci Milliyetiniz</label>
+                                    <label className="form-sub-label" htmlFor="ikincimilliyet" style={{ minHeight: "13px", ariaHidden: "false" }}>Varsa İkinci Milliyetiniz</label>
                                     <select id="ikincimilliyet" name="ikincimilliyet" className="form-select"
-                                        value={ikinciMilliyet}
-                                        onChange={(e) => setIkinciMilliyet(e.target.value)}>
+                                        value={bilgi.ikinciMilliyet}
+                                        onChange={(e) => setBilgi({ ...bilgi, ikinciMilliyet: e.target.value })}>
                                         <option value="">Lütfen Seçiniz</option>
                                         <option value="Yok">Yok</option>
                                         <option value="Türk" selected>Türk</option>
@@ -556,18 +597,18 @@ function BasvuruFormu() {
                                     </select><br />
                                 </div>
                                 <div className='col-4'>
-                                    <label for="tcNo" style={{ minHeight: "13px", ariaHidden: "false" }}>Vatandaşlık Numaranız</label>
+                                    <label htmlFor="tcNo" style={{ minHeight: "13px", ariaHidden: "false" }}>Vatandaşlık Numaranız</label>
                                     <input type="number" className="form-control" name="tcNo" id="tcNo" required
-                                        value={tcNo}
-                                        onChange={(e) => setTcNo(e.target.value)} /><br />
+                                        value={bilgi.tcNo}
+                                        onChange={(e) => setBilgi({ ...bilgi, tcNo: e.target.value })} /><br />
                                 </div>
                                 <div className='col-4'>
-                                    <label for="engellilik" >Engel Durumu</label>
+                                    <label htmlFor="engellilik" >Engel Durumu</label>
                                     <select className="form-select"
                                         name="disability"
                                         id="disability"
-                                        value={disability}
-                                        onChange={(e) => setDisability(e.target.value)}
+                                        value={bilgi.disability}
+                                        onChange={(e) => setBilgi({ ...bilgi, disability: e.target.value })}
                                         required>
                                         <option value="">Lütfen Seçiniz</option>
                                         <option value="Evet">Evet</option>
@@ -579,18 +620,18 @@ function BasvuruFormu() {
                                         placeholder="Varsa kısaca açıklayınız"
                                         id="why"
                                         name="why"
-                                        value={why}
-                                        onChange={(e) => setWhy(e.target.value)}
+                                        value={bilgi.why}
+                                        onChange={(e) => setBilgi({ ...bilgi, why: e.target.value })}
                                     /><br />
                                 </div>
                                 <div className='col-12'>
                                     <h4><label className="form-label form-label-left form-label-auto" id="adres" name="adres" for="adres"><b>Adres Bilgileri</b></label></h4><hr />
                                 </div>
                                 <div className='col-4'>
-                                    <label for="ulke" >Yaşadığınız Ülke</label>
+                                    <label htmlFor="ulke" >Yaşadığınız Ülke</label>
                                     <select name="ulke" className="form-select" id="ulke" required
-                                        value={ulke}
-                                        onChange={(e) => setUlke(e.target.value)}>
+                                        value={bilgi.ulke}
+                                        onChange={(e) => setBilgi({ ...bilgi, ulke: e.target.value })}>
                                         <option value="">Lütfen Seçiniz</option>
                                         <option value="Türkiye" selected>Türkiye</option>
                                         <option value="ABD Virgin Adaları">ABD Virgin Adaları</option>
@@ -842,49 +883,49 @@ function BasvuruFormu() {
                                     </select>
                                 </div>
                                 <div className='col-4'>
-                                    <label for="il" >Il</label>
+                                    <label htmlFor="il" >Il</label>
                                     <input type="text" className="form-control" id="il" name="il" required
-                                        value={il}
-                                        onChange={(e) => setIl(e.target.value)} /><br />
+                                        value={bilgi.il}
+                                        onChange={(e) => setBilgi({ ...bilgi, il: e.target.value })} /><br />
                                 </div>
                                 <div className='col-4'>
-                                    <label for="ilce" >Ilce</label>
+                                    <label htmlFor="ilce" >Ilce</label>
                                     <input type="text" className="form-control" id="ilce" name="ilce" required
-                                        value={ilce}
-                                        onChange={(e) => setIlce(e.target.value)} /><br />
+                                        value={bilgi.ilce}
+                                        onChange={(e) => setBilgi({ ...bilgi, ilce: e.target.value })} /><br />
                                 </div>
                                 <div className='col-4'>
-                                    <label for="mahalle" >Mahalle</label>
+                                    <label htmlFor="mahalle" >Mahalle</label>
                                     <input type="text" className="form-control" id="mahalle" name="mahalle" required
-                                        value={mahalle}
-                                        onChange={(e) => setMahalle(e.target.value)} /><br />
+                                        value={bilgi.mahalle}
+                                        onChange={(e) => setBilgi({ ...bilgi, mahalle: e.target.value })} /><br />
                                 </div>
                                 <div className='col-4'>
-                                    <label for="sokak" >Sokak</label>
+                                    <label htmlFor="sokak" >Sokak</label>
                                     <input type="sokak" className="form-control" id="sokak" name="sokak" required
-                                        value={sokak}
-                                        onChange={(e) => setSokak(e.target.value)} /><br />
+                                        value={bilgi.Street}
+                                        onChange={(e) => setBilgi({ ...bilgi, Street: e.target.value })} /><br />
                                 </div>
                                 <div className='col-4'>
-                                    <label for="AptNo" >Apartman No</label>
+                                    <label htmlFor="AptNo" >Apartman No</label>
                                     <input type="number" className="form-control" id="apartno" name="apartno" required
-                                        value={apartno}
-                                        onChange={(e) => setApartno(e.target.value)} /><br />
+                                        value={bilgi.apartNo}
+                                        onChange={(e) => setBilgi({ ...bilgi, apartNo: e.target.value })} /><br />
                                 </div>
                                 <div className='col-4'>
-                                    <label for="zip" >Posta Kodu</label>
+                                    <label htmlFor="zip" >Posta Kodu</label>
                                     <input type="number" className="form-control" id="zip" name="zip" required
-                                        value={zip}
-                                        onChange={(e) => setZip(e.target.value)} /><br />
+                                        value={bilgi.zip}
+                                        onChange={(e) => setBilgi({ ...bilgi, zip: e.target.value })} /><br />
                                 </div>
                                 <div className='col-12'>
-                                    <h4><label className="form-label form-label-left form-label-auto" id="adres" name="adres" for="adres"><b>Eğitim Bilgileri</b></label></h4><hr />
+                                    <h4><label className="form-label form-label-left form-label-auto" id="adres" name="adres" htmlFor="adres"><b>Eğitim Bilgileri</b></label></h4><hr />
                                 </div>
                                 <div className='col-4'>
-                                    <label for="universite" >Üniversite</label>
+                                    <label htmlFor="universite" >Üniversite</label>
                                     <select className="form-select" id="universite" name="universite" required
-                                        value={universite}
-                                        onChange={(e) => setUniversite(e.target.value)}>
+                                        value={bilgi.universite}
+                                        onChange={(e) => setBilgi({ ...bilgi, universite: e.target.value })}>
                                         <option value="">Lütfen Seçiniz</option>
                                         <option value="Abant İzzet Baysal Üniversitesi">Abant İzzet Baysal Üniversitesi</option>
                                         <option value="Abdullah Gül Üniversitesi">Abdullah Gül Üniversitesi</option>
@@ -1080,16 +1121,19 @@ function BasvuruFormu() {
                                     </select>
                                 </div>
                                 <div className='col-4'>
-                                    <label for="fakulte" >Fakülte</label>
+                                    <label htmlFor="fakulte" >Fakülte</label>
                                     <input type="text" className="form-control" id="fakulte" name="fakulte" required
-                                        value={fakulte}
-                                        onChange={(e) => setFakulte(e.target.value)} /><br />
+                                        value={bilgi.fakulte}
+                                        onChange={(e) => setBilgi({ ...bilgi, fakulte: e.target.value })}
+                                    />
+                                    <br />
                                 </div>
+
                                 <div className='col-4'>
-                                    <label for="bolum" >Bölüm</label>
+                                    <label htmlFor="bolum" >Bölüm</label>
                                     <select className="form-select" id="bolum" name="bolum" required
-                                        value={bolum}
-                                        onChange={(e) => setBolum(e.target.value)}>
+                                        value={bilgi.bolum}
+                                        onChange={(e) => setBilgi({ ...bilgi, bolum: e.target.value })}>
                                         <option value="">Lütfen Seçiniz</option>
 
                                         <optgroup label="2 Yıllık Ön Lisans Programları">
@@ -1154,10 +1198,10 @@ function BasvuruFormu() {
                                     </select>
                                 </div>
                                 <div className='col-4'>
-                                    <label for="nationality" >Mezuniyet Durumunuz</label>
+                                    <label htmlFor="nationality" >Mezuniyet Durumunuz</label>
                                     <select name="nationality" className="form-select" id="mezuniyet"
-                                        value={mezuniyet}
-                                        onChange={(e) => setMezuniyet(e.target.value)}
+                                        value={bilgi.mezuniyet}
+                                        onChange={(e) => setBilgi({ ...bilgi, mezuniyet: e.target.value })}
                                         required>
                                         <option value="">Lütfen Seçiniz</option>
                                         <option value="mezun">Mezun</option>
@@ -1165,72 +1209,80 @@ function BasvuruFormu() {
                                     </select><br />
                                 </div>
                                 <div className='col-4'>
-                                    <label for="date" >Mezuniyet Tarihiniz</label>
+                                    <label htmlForr="date" >Mezuniyet Tarihiniz</label>
                                     <input type="date" className="form-control" id="MezuniyetTarih" name="MezuniyetTarih" required
-                                        value={mezuniyetTarih}
-                                        onChange={(e) => setMezuniyetTarih(e.target.value)} /><br />
+                                        value={bilgi.mezuniyetTarih ? new Date(bilgi.tarih).toLocaleDateString('en-CA') : ""}
+                                        onChange={(e) => setBilgi({ ...bilgi, mezuniyetTarih: e.target.value })} /><br />
                                 </div>
                                 <div className='col-4'>
-                                    <label for="not" >Not Ortalamanız</label>
+                                    <label htmlFor="not" >Not Ortalamanız</label>
                                     <input type="number" className="form-control" id="not" name="not" required
-                                        value={not}
-                                        onChange={(e) => setNot(e.target.value)} /><br />
+                                        value={bilgi.not}
+                                        onChange={(e) => setBilgi({ ...bilgi, not: e.target.value })} /><br />
                                 </div>
                                 <div className='col-12'>
-                                    <h4><label className="form-label form-label-left form-label-auto" id="adres" name="adres" for="adres"><b>Doküman Bilgileri</b></label></h4><hr />
+                                    <h4><label className="form-label form-label-left form-label-auto" id="adres" name="adres" htmlFor="adres"><b>Doküman Bilgileri</b></label></h4><hr />
                                 </div>
                                 <div className='col-4'>
-                                    <label for="cv" >Cv</label>
+                                    <label htmlFor="cv" >Cv</label>
                                     <input type="file" className="form-control" id="cv" name="cv" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required
                                         value={cv}
                                         onChange={(e) => setCv(e.target.value)} /><br />
                                 </div>
                                 <div className='col-4'>
-                                    <label for="date" >Niyet Mektubu</label>
+                                    <label htmlForfor="date" >Niyet Mektubu</label>
                                     <input type="file" className="form-control" id="niyet" name="niyet" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required
                                         value={niyet}
                                         onChange={(e) => setNiyet(e.target.value)} /><br />
                                 </div>
                                 <div className='col-4'>
-                                    <label for="diploma" >Diploma</label>
+                                    <label htmlFor="diploma" >Diploma</label>
                                     <input type="file" className="form-control" id="diploma" name="diploma" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required
                                         value={diploma}
                                         onChange={(e) => setDiploma(e.target.value)} /><br />
                                 </div>
                                 <div className='col-4'>
-                                    <label for="ingYetkin" >İngilizce Yetkinlik Belgesi</label>
+                                    <label htmlFor="ingYetkin" >İngilizce Yetkinlik Belgesi</label>
                                     <input type="file" className="form-control" id="ingYetkin" name="ingYetkin" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required
                                         value={ingYetkin}
                                         onChange={(e) => setIngYetkin(e.target.value)} /><br />
                                 </div>
                                 <div className='col-4'>
-                                    <label for="ikametgah" >İkametgah</label>
+                                    <label htmlFor="ikametgah" >İkametgah</label>
                                     <input type="file" className="form-control" id="ikametgah" name="ikametgah" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required
                                         value={ikametgah}
                                         onChange={(e) => setIkametgah(e.target.value)} /><br />
                                 </div>
                                 <div className='col-4'>
-                                    <label for="pasaport" >Pasaport</label>
+                                    <label htmlFor="pasaport" >Pasaport</label>
                                     <input type="file" className="form-control" id="pasaport" name="pasaport" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required
                                         value={pasaport}
                                         onChange={(e) => setPasaport(e.target.value)} /><br />
                                 </div>
                                 <div className='col-lg-6'>
-                                    <label for="number">Telefon</label>
+                                    <label htmlFor="number">Telefon</label>
                                     <input type="number" className="form-control"
-                                        value={telefon}
-                                        onChange={(e) => setTelefon(e.target.value)}
+                                        value={bilgi.telefon}
+                                        onChange={(e) => setBilgi({ ...bilgi,telefon: e.target.value })}
                                         required /><br />
                                 </div>
                                 <div className='col-lg-6'>
-                                    <label for="email">Email</label>
+                                    <label htmlFor="email">Email</label>
                                     <input type="email" className="form-control"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        value={bilgi.email}
+                                        onChange={(e) => setBilgi({ ...bilgi,email: e.target.value })}
                                         required /><br />
                                 </div>
 
-                                <button type="submit" className="btn btn-outline-success ms-3">Basvuru Gonder</button>
+                                <div class="row justify-content-center mt-5 mb-5" >
+                                    <div>
+                                        <center>
+                                            <Link style={{ marginRight: "2%" }} className='btn btn-dark' to="/portal/BasvuruGoruntule"> Basvuru Görüntüle </Link>
+                                            <button class="btn btn-dark" style={{ fontSize: "15px", height: "20%", width: "20%", fontFamily: "monospace" }} type="submit">Güncelle</button>
+
+                                        </center>
+                                    </div>
+                                </div>
 
                                 {error && <p style={{ color: 'red' }}> {error} </p>}
                                 {success && <p style={{ color: 'green' }}> {success} </p>}
@@ -1247,4 +1299,4 @@ function BasvuruFormu() {
 
 }
 
-export default BasvuruFormu;
+export default Basvuruguncelle;

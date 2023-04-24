@@ -41,6 +41,8 @@ app.post('/kayit', (req, res) => {
 
 });
 
+
+
 app.post('/', (req, res) => {
 
     const { email, password } = req.body;
@@ -278,10 +280,125 @@ app.post("/formGoster", (req, res) => {
       res.status(500).send({ error: "Veritabanindan bilgi alinirken hata olustu." });
     });
   });
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 
+app.post('/password', (req, res) => {
+  const { email, password, passnew, passnewtekrar } = req.body;
+
+  if (passnew !== passnewtekrar) {
+    res.status(400).send({ error: "Yeni şifre ve tekrarı eşleşmiyor." });
+    return;
+  }
+
+  const query = "SELECT * FROM users WHERE username=? AND password=?";
+
+  connection.query(query, [email, password], (err, result) => {
+    if (err) {
+      console.error("Bilgilerin kontrolunde hata oluştu. ", err);
+      res.status(500).send({ error: 'Bilgilerin kontrolünde hata oluştu.' });
+      return;
+    }
+
+    if (result.length === 0) {
+      res.status(401).send({ error: "Mevcut şifreniz yanlış." });
+      return;
+    }
+
+    const updatePasswordQuery = "UPDATE users SET password = ? WHERE username = ?";
+    connection.query(updatePasswordQuery, [passnew, email], (err, result) => {
+      if (err) {
+        console.error("Veritabanına şifre güncellenirken hata oluştu: ", err);
+        res.status(500).send({ error: "Şifre güncellenirken bir hata oluştu." });
+        return;
+      }
+
+      res.status(200).send({ success: "Şifreniz başarıyla güncellendi." });
+    });
+  });
+});
+
+// const transporter = nodemailer.createTransport({
+//   service: 'Hotmail',
+//   auth: {
+//       user: 'birsezgiersoy@hotmail.com',
+//       pass: 'SezgiYekta2017*'
+//   }
+// });
+// app.post('/submit-form', function(req, res){
+
+//   var gonderenEmail = req.body.email;
+//   var mesaj = req.body.mesaj;
+//   var name = req.body.name;
+
+//   var mailOption = 
+//   {
+//       from: gonderenEmail,
+//       to: 'ofluoglusezgi@gmail.com',
+//       subject: "Erasmus Portal'dan Mesaj",
+//       text: "Gönderen: " + name + " Mesaj: " + mesaj
+//   }
+
+//   transporter.sendMail(mailOption, function(err, info){
+//       if(err) {
+//           console.error(err);
+//           res.status(500).send({ message: "Mesaj Gönderilemedi!" });
+//       } else {
+//           console.log("Mail gönderildi" + info.messageId);
+//           res.status(200).send({ message: "1", id: info.messageId });
+//       }
+//   });
+// });
+
+
+app.post('/guncelle', (req, res) => {
+  const {id,soyisim,isim,cinsiyet,tarih,telefon,tcNo,ulke,milliyet,ikinciMilliyet,il,ilce,mahalle,sokak,apartno,zip,why,disability,universite,fakulte,bolum,mezuniyet,mezuniyetTarih,not,cv,niyet,diploma,ingYetkin,ikametgah,pasaport} = req.body;
+
+  const kontrolQuery ="SELECT * FROM usertable WHERE UserID =?";
+  connection.query(kontrolQuery, [id], (err,result) => {
+     
+          const updateQuery1 = "UPDATE usertable SET LastName=?, FirstName=?, Gender=?, BirthDate=?, PhoneNumber=? WHERE UserID=?";
+          const updateQuery2 = "UPDATE nationalitytable SET IdNumber=?, Country=?, NationalityName=?, SecondNationalityName=? WHERE UserID=?";
+          const updateQuery3 = "UPDATE addresstable SET City=?, District=?, Neighborhood=?, Street=?, ApartmentNumber=?, PostCode=? WHERE UserID=?";
+          const updateQuery4 = "UPDATE disabilitytable SET DisabilityStatus=?, DisabilityName=? WHERE UserID=?";
+          const updateQuery5 = "UPDATE educationtable SET UnivercityName=?, FacultyName=?, DepartmentName=?, GraduationStatus=?, GraduationDate=?, GradeAverage=? WHERE UserID=?";
+          const updateQuery6 = "UPDATE userdocumenttable SET Cv=?, LetterOfIntent=?, Diploma=?, EnglishCertificateOfCompetence=?, PlaceOfResidence=?, Passport=?, DocumentUploadDate=? WHERE UserID=?";
+          const updateQuery7 = "UPDATE applicationtable SET ApplicationDate=?, ApplicationStatus=? WHERE UserID=?";
+
+          const now = moment();
+          const formattedDate = now.format('YYYY-MM-DD');
+
+          let numQueriesCompleted = 0;
+
+          connection.query(updateQuery1, [soyisim,isim,cinsiyet,tarih,telefon, id], handleQueryCompletion);
+          connection.query(updateQuery2, [tcNo,ulke,milliyet,ikinciMilliyet, id], handleQueryCompletion);
+          connection.query(updateQuery3, [il,ilce,mahalle,sokak,apartno,zip, id], handleQueryCompletion);
+          connection.query(updateQuery4, [why,disability, id], handleQueryCompletion);
+          connection.query(updateQuery5, [universite,fakulte,bolum,mezuniyet,mezuniyetTarih,not, id], handleQueryCompletion);
+          connection.query(updateQuery6, [cv,niyet,diploma,ingYetkin,ikametgah,pasaport, formattedDate, id], handleQueryCompletion);
+          connection.query(updateQuery7, [formattedDate, "Başvuru Durumu Devam Ediyor", id], handleQueryCompletion);
+
+          function handleQueryCompletion(err, result) {
+            numQueriesCompleted++;
+          
+            if (err) {
+              console.error("Veritabaninda bilgi güncellenirken hata: ", err);
+              res.status(500).send({ error: "Güncellenirken bir hata olustu." });
+              return;
+            }
+          
+            if (numQueriesCompleted === 7) {
+              res.status(200).send({ message: "Güncelleme basarili!" });
+            }
+          }
+      
+    })
+});
 
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
     console.log(`Server ${PORT} üzerinde dinleniyor.`);
 });
+ 
+
+
