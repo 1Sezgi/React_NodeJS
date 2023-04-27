@@ -85,8 +85,8 @@ function Basvuruguncelle() {
 
         try {
 
-            const response = await axios.post("http://localhost:3001/guncelle", {
-                id, soyisim, isim, cinsiyet, tarih, telefon, tcNo, ulke, milliyet, ikinciMilliyet, il, ilce, mahalle, sokak, apartno, zip, why, disability, universite, fakulte, bolum, mezuniyet, mezuniyetTarih, not, cv, niyet, diploma, ingYetkin, ikametgah, pasaport
+            const response = await axios.post("http://localhost:3001/BasvuruGuncelle", {
+                id, soyisim, isim, cinsiyet, tarih, telefon, tcNo, ulke, milliyet, ikinciMilliyet, il, ilce, mahalle, sokak, apartno, zip, why, disability, universite, fakulte, bolum, mezuniyet, mezuniyetTarih, not, cv, niyet, diploma, ingYetkin, ikametgah, pasaport,email
             });
 
             if (response.status === 200) {
@@ -146,7 +146,6 @@ function Basvuruguncelle() {
                     <Sidebar
                         form_active="active"
                         form_disable="disabled"
-                    // gor_to="/portal/BasvuruGoruntule"
                     />
                 </div>
                 <div className="col-10">
@@ -162,24 +161,24 @@ function Basvuruguncelle() {
                                 <div className='col-lg-4'>
                                     <label htmlFor="isim" style={{ minHeight: "13px", ariaHidden: "false" }}>Adınız</label>
                                     <input type="text" className="form-control"
-                                        value={bilgi.isim}
-                                        onChange={(e) => setBilgi({ ...bilgi, isim: e.target.value })}
+                                        placeholder={bilgi.isim}
+                                        onChange={(e) => setIsim(e.target.value)}
                                         required />
                                 </div>
                                 <br />
                                 <div className='col-lg-4'>
                                     <label htmlFor="soyisim" style={{ minHeight: "13px", ariaHidden: "false" }}>Soyadınız</label>
                                     <input type="text" className="form-control"
-                                        value={bilgi.soyisim}
-                                        onChange={(e) => setBilgi({ ...bilgi, soyisim: e.target.value })}
+                                         placeholder={bilgi.soyisim}
+                                        onChange={(e) => setSoyisim(e.target.value)}
                                         minLength="2"
                                         required /><br />
                                 </div>
                                 <div className='col-lg-4'>
                                     <label className="form-sub-label" htmlFor="cins" style={{ minHeight: "13px", ariaHidden: "false" }} />
                                     <select id="cins" name="cins" className="form-select" required
-                                        value={bilgi.cinsiyet}
-                                        onChange={(e) => setBilgi({ ...bilgi, cinsiyet: e.target.value })}>
+                                        placeholder={bilgi.cinsiyet}
+                                        onChange={(e) => setCinsiyet(e.target.value)}>
                                         <option hidden selected value="">Cinsiyet Seçiniz</option>
                                         <option value="Kadin">Kadın</option>
                                         <option value="Erkek">Erkek</option>
@@ -189,15 +188,15 @@ function Basvuruguncelle() {
                                 <div className='col-4'>
                                     <label htmlFor="tarih" style={{ minHeight: "13px", ariaHidden: "false" }}>Doğum Tarihiniz</label>
                                     <input type="date" className="form-control" id="tarih" name="tarih" required
-                                       value={bilgi.tarih ? new Date(bilgi.tarih).toLocaleDateString('en-CA') : ""}
-                                        onChange={(e) => setBilgi({ ...bilgi, tarih: e.target.value })} /><br />
+                                      placeholder={bilgi.tarih ? new Date(bilgi.tarih).toLocaleDateString('en-CA') : ""}
+                                        onChange={(e) => setTarih(e.target.value)} /><br />
                                 </div>
 
                                 <div className='col-4'>
                                     <label className="form-sub-label" htmlFor="milliyet" style={{ minHeight: "13px", ariaHidden: "false" }}>Milliyetiniz</label>
                                     <select id="milliyet" name="milliyet" className="form-select" required
-                                        value={bilgi.milliyet}
-                                        onChange={(e) => setBilgi({ ...bilgi, milliyet: e.target.value })}>
+                                        placeholder={bilgi.milliyet}
+                                        onChange={(e) => setMilliyet(e.target.value)}>
                                         <option value="">Lütfen Seçiniz</option>
                                         <option value="Türk" selected>Türk</option>
                                         <option value="Afgan">Afgan</option>
@@ -397,8 +396,8 @@ function Basvuruguncelle() {
                                 <div className='col-lg-4'>
                                     <label className="form-sub-label" htmlFor="ikincimilliyet" style={{ minHeight: "13px", ariaHidden: "false" }}>Varsa İkinci Milliyetiniz</label>
                                     <select id="ikincimilliyet" name="ikincimilliyet" className="form-select"
-                                        value={bilgi.ikinciMilliyet}
-                                        onChange={(e) => setBilgi({ ...bilgi, ikinciMilliyet: e.target.value })}>
+                                       placeholder={bilgi.ikinciMilliyet}
+                                        onChange={(e) => setIkinciMilliyet(e.target.value)}>
                                         <option value="">Lütfen Seçiniz</option>
                                         <option value="Yok">Yok</option>
                                         <option value="Türk" selected>Türk</option>
@@ -599,16 +598,16 @@ function Basvuruguncelle() {
                                 <div className='col-4'>
                                     <label htmlFor="tcNo" style={{ minHeight: "13px", ariaHidden: "false" }}>Vatandaşlık Numaranız</label>
                                     <input type="number" className="form-control" name="tcNo" id="tcNo" required
-                                        value={bilgi.tcNo}
-                                        onChange={(e) => setBilgi({ ...bilgi, tcNo: e.target.value })} /><br />
+                                        placeholder={bilgi.tcNo}
+                                        onChange={(e) => setTcNo(e.target.value)}/><br />
                                 </div>
                                 <div className='col-4'>
                                     <label htmlFor="engellilik" >Engel Durumu</label>
                                     <select className="form-select"
                                         name="disability"
                                         id="disability"
-                                        value={bilgi.disability}
-                                        onChange={(e) => setBilgi({ ...bilgi, disability: e.target.value })}
+                                        placeholder={bilgi.disability}
+                                        onChange={(e) => setDisability(e.target.value)}
                                         required>
                                         <option value="">Lütfen Seçiniz</option>
                                         <option value="Evet">Evet</option>
@@ -621,7 +620,7 @@ function Basvuruguncelle() {
                                         id="why"
                                         name="why"
                                         value={bilgi.why}
-                                        onChange={(e) => setBilgi({ ...bilgi, why: e.target.value })}
+                                        onChange={(e) => setWhy(e.target.value)}
                                     /><br />
                                 </div>
                                 <div className='col-12'>
@@ -630,8 +629,8 @@ function Basvuruguncelle() {
                                 <div className='col-4'>
                                     <label htmlFor="ulke" >Yaşadığınız Ülke</label>
                                     <select name="ulke" className="form-select" id="ulke" required
-                                        value={bilgi.ulke}
-                                        onChange={(e) => setBilgi({ ...bilgi, ulke: e.target.value })}>
+                                        placeholder={bilgi.ulke}
+                                        onChange={(e) => setUlke(e.target.value)}>
                                         <option value="">Lütfen Seçiniz</option>
                                         <option value="Türkiye" selected>Türkiye</option>
                                         <option value="ABD Virgin Adaları">ABD Virgin Adaları</option>
@@ -885,38 +884,38 @@ function Basvuruguncelle() {
                                 <div className='col-4'>
                                     <label htmlFor="il" >Il</label>
                                     <input type="text" className="form-control" id="il" name="il" required
-                                        value={bilgi.il}
-                                        onChange={(e) => setBilgi({ ...bilgi, il: e.target.value })} /><br />
+                                       placeholder={bilgi.il}
+                                        onChange={(e) => setIl(e.target.value)} /><br />
                                 </div>
                                 <div className='col-4'>
                                     <label htmlFor="ilce" >Ilce</label>
                                     <input type="text" className="form-control" id="ilce" name="ilce" required
-                                        value={bilgi.ilce}
-                                        onChange={(e) => setBilgi({ ...bilgi, ilce: e.target.value })} /><br />
+                                       placeholder={bilgi.ilce}
+                                        onChange={(e) => setIlce(e.target.value)}/><br />
                                 </div>
                                 <div className='col-4'>
                                     <label htmlFor="mahalle" >Mahalle</label>
                                     <input type="text" className="form-control" id="mahalle" name="mahalle" required
-                                        value={bilgi.mahalle}
-                                        onChange={(e) => setBilgi({ ...bilgi, mahalle: e.target.value })} /><br />
+                                        placeholder={bilgi.mahalle}
+                                        onChange={(e) => setMahalle(e.target.value)}/><br />
                                 </div>
                                 <div className='col-4'>
                                     <label htmlFor="sokak" >Sokak</label>
                                     <input type="sokak" className="form-control" id="sokak" name="sokak" required
-                                        value={bilgi.Street}
-                                        onChange={(e) => setBilgi({ ...bilgi, Street: e.target.value })} /><br />
+                                        placeholder={bilgi.Street}
+                                        onChange={(e) => setSokak(e.target.value)} /><br />
                                 </div>
                                 <div className='col-4'>
                                     <label htmlFor="AptNo" >Apartman No</label>
                                     <input type="number" className="form-control" id="apartno" name="apartno" required
-                                        value={bilgi.apartNo}
-                                        onChange={(e) => setBilgi({ ...bilgi, apartNo: e.target.value })} /><br />
+                                        placeholder={bilgi.apartno}
+                                        onChange={(e) => setApartno(e.target.value)} /><br />
                                 </div>
                                 <div className='col-4'>
                                     <label htmlFor="zip" >Posta Kodu</label>
                                     <input type="number" className="form-control" id="zip" name="zip" required
-                                        value={bilgi.zip}
-                                        onChange={(e) => setBilgi({ ...bilgi, zip: e.target.value })} /><br />
+                                       placeholder={bilgi.zip}
+                                        onChange={(e) => setZip(e.target.value)} /><br />
                                 </div>
                                 <div className='col-12'>
                                     <h4><label className="form-label form-label-left form-label-auto" id="adres" name="adres" htmlFor="adres"><b>Eğitim Bilgileri</b></label></h4><hr />
@@ -924,8 +923,8 @@ function Basvuruguncelle() {
                                 <div className='col-4'>
                                     <label htmlFor="universite" >Üniversite</label>
                                     <select className="form-select" id="universite" name="universite" required
-                                        value={bilgi.universite}
-                                        onChange={(e) => setBilgi({ ...bilgi, universite: e.target.value })}>
+                                        placeholder={bilgi.universite}
+                                        onChange={(e) => setUniversite(e.target.value)}>
                                         <option value="">Lütfen Seçiniz</option>
                                         <option value="Abant İzzet Baysal Üniversitesi">Abant İzzet Baysal Üniversitesi</option>
                                         <option value="Abdullah Gül Üniversitesi">Abdullah Gül Üniversitesi</option>
@@ -1123,8 +1122,8 @@ function Basvuruguncelle() {
                                 <div className='col-4'>
                                     <label htmlFor="fakulte" >Fakülte</label>
                                     <input type="text" className="form-control" id="fakulte" name="fakulte" required
-                                        value={bilgi.fakulte}
-                                        onChange={(e) => setBilgi({ ...bilgi, fakulte: e.target.value })}
+                                        placeholder={bilgi.fakulte}
+                                        onChange={(e) => setFakulte(e.target.value)}
                                     />
                                     <br />
                                 </div>
@@ -1132,8 +1131,8 @@ function Basvuruguncelle() {
                                 <div className='col-4'>
                                     <label htmlFor="bolum" >Bölüm</label>
                                     <select className="form-select" id="bolum" name="bolum" required
-                                        value={bilgi.bolum}
-                                        onChange={(e) => setBilgi({ ...bilgi, bolum: e.target.value })}>
+                                        placeholder={bilgi.bolum}
+                                        onChange={(e) => setBolum(e.target.value)}>
                                         <option value="">Lütfen Seçiniz</option>
 
                                         <optgroup label="2 Yıllık Ön Lisans Programları">
@@ -1200,8 +1199,8 @@ function Basvuruguncelle() {
                                 <div className='col-4'>
                                     <label htmlFor="nationality" >Mezuniyet Durumunuz</label>
                                     <select name="nationality" className="form-select" id="mezuniyet"
-                                        value={bilgi.mezuniyet}
-                                        onChange={(e) => setBilgi({ ...bilgi, mezuniyet: e.target.value })}
+                                       placeholder={bilgi.mezuniyet}
+                                        onChange={(e) => setMezuniyet(e.target.value)}
                                         required>
                                         <option value="">Lütfen Seçiniz</option>
                                         <option value="mezun">Mezun</option>
@@ -1211,14 +1210,14 @@ function Basvuruguncelle() {
                                 <div className='col-4'>
                                     <label htmlForr="date" >Mezuniyet Tarihiniz</label>
                                     <input type="date" className="form-control" id="MezuniyetTarih" name="MezuniyetTarih" required
-                                        value={bilgi.mezuniyetTarih ? new Date(bilgi.tarih).toLocaleDateString('en-CA') : ""}
-                                        onChange={(e) => setBilgi({ ...bilgi, mezuniyetTarih: e.target.value })} /><br />
+                                        placeholder={bilgi.mezuniyetTarih ? new Date(bilgi.tarih).toLocaleDateString('en-CA') : ""}
+                                        onChange={(e) => setMezuniyetTarih(e.target.value)} /><br />
                                 </div>
                                 <div className='col-4'>
                                     <label htmlFor="not" >Not Ortalamanız</label>
                                     <input type="number" className="form-control" id="not" name="not" required
-                                        value={bilgi.not}
-                                        onChange={(e) => setBilgi({ ...bilgi, not: e.target.value })} /><br />
+                                        placeholder={bilgi.not}
+                                        onChange={(e) => setNot(e.target.value)}/><br />
                                 </div>
                                 <div className='col-12'>
                                     <h4><label className="form-label form-label-left form-label-auto" id="adres" name="adres" htmlFor="adres"><b>Doküman Bilgileri</b></label></h4><hr />
@@ -1226,51 +1225,51 @@ function Basvuruguncelle() {
                                 <div className='col-4'>
                                     <label htmlFor="cv" >Cv</label>
                                     <input type="file" className="form-control" id="cv" name="cv" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required
-                                        value={cv}
+                                        placeholder={cv}
                                         onChange={(e) => setCv(e.target.value)} /><br />
                                 </div>
                                 <div className='col-4'>
                                     <label htmlForfor="date" >Niyet Mektubu</label>
                                     <input type="file" className="form-control" id="niyet" name="niyet" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required
-                                        value={niyet}
+                                        placeholder={niyet}
                                         onChange={(e) => setNiyet(e.target.value)} /><br />
                                 </div>
                                 <div className='col-4'>
                                     <label htmlFor="diploma" >Diploma</label>
                                     <input type="file" className="form-control" id="diploma" name="diploma" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required
-                                        value={diploma}
+                                        placeholder={diploma}
                                         onChange={(e) => setDiploma(e.target.value)} /><br />
                                 </div>
                                 <div className='col-4'>
                                     <label htmlFor="ingYetkin" >İngilizce Yetkinlik Belgesi</label>
                                     <input type="file" className="form-control" id="ingYetkin" name="ingYetkin" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required
-                                        value={ingYetkin}
+                                        placeholder={ingYetkin}
                                         onChange={(e) => setIngYetkin(e.target.value)} /><br />
                                 </div>
                                 <div className='col-4'>
                                     <label htmlFor="ikametgah" >İkametgah</label>
                                     <input type="file" className="form-control" id="ikametgah" name="ikametgah" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required
-                                        value={ikametgah}
+                                       placeholder={ikametgah}
                                         onChange={(e) => setIkametgah(e.target.value)} /><br />
                                 </div>
                                 <div className='col-4'>
                                     <label htmlFor="pasaport" >Pasaport</label>
                                     <input type="file" className="form-control" id="pasaport" name="pasaport" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required
-                                        value={pasaport}
+                                        placeholder={pasaport}
                                         onChange={(e) => setPasaport(e.target.value)} /><br />
                                 </div>
                                 <div className='col-lg-6'>
                                     <label htmlFor="number">Telefon</label>
                                     <input type="number" className="form-control"
-                                        value={bilgi.telefon}
-                                        onChange={(e) => setBilgi({ ...bilgi,telefon: e.target.value })}
+                                        placeholder={bilgi.telefon}
+                                        onChange={(e) => setTelefon(e.target.value)}
                                         required /><br />
                                 </div>
                                 <div className='col-lg-6'>
                                     <label htmlFor="email">Email</label>
                                     <input type="email" className="form-control"
-                                        value={bilgi.email}
-                                        onChange={(e) => setBilgi({ ...bilgi,email: e.target.value })}
+                                        placeholder={bilgi.email}
+                                        onChange={(e) => setEmail(e.target.value)}
                                         required /><br />
                                 </div>
 

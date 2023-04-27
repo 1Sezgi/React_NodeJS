@@ -72,9 +72,7 @@ function Login() {
 
                     {error && <p style={{ color: 'red' }}> {error} </p>}
                     {success && <p style={{ color: 'green' }}>{success}</p>}
-                    <p>
-                        Şifrenizi güncellemek ister misiniz? <Link style={{ color: "black" }} to="/password"><a href=''>Şifremi Güncelle</a></Link>
-                    </p>
+                   
                     <p>
                         Hesabınız yok mu? <Link to="/kayit">Kayıt Ol!</Link>
                     </p>

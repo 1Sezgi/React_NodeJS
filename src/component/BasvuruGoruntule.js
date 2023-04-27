@@ -75,7 +75,7 @@ function BasvuruGoruntule() {
                     <li>Yaşadığınız İlçe: <span style={{ color: "black", fontStyle: "italic", fontWeight: "bold" }} >{bilgi.ilce}</span></li>
                     <li>Yaşadığınız Mahalle: <span style={{ color: "black", fontStyle: "italic", fontWeight: "bold" }}>{bilgi.mahalle}</span></li>
                     <li>Yaşadığınız Sokak: <span style={{ color: "black", fontStyle: "italic", fontWeight: "bold" }}>{bilgi.Street}</span></li>
-                    <li>Apartman No: <span style={{ color: "black", fontStyle: "italic", fontWeight: "bold" }}>{bilgi.apartNo}</span></li>
+                    <li>Apartman No: <span style={{ color: "black", fontStyle: "italic", fontWeight: "bold" }}>{bilgi.apartno}</span></li>
                     <li> Posta Kodu: <span style={{ color: "black", fontStyle: "italic", fontWeight: "bold" }}>{bilgi.zip}</span></li>
 
                     <br></br><h2 className="text-center">Eğitim Bilgilerim</h2><hr></hr>

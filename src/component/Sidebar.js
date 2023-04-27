@@ -45,6 +45,7 @@ function Sidebar(props) {
                     <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
                         <li><hr className="dropdown-divider"/></li>
                         <li><a className="dropdown-item" href="#" onClick={() => Signout(navigate)}>Çıkış Yap</a></li>
+                        <li><a className="dropdown-item" href="/Password">Sifre Guncelle</a></li>
                     </ul>
                     </div>
                 </div>    

@@ -2,6 +2,7 @@
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const cors = require('cors');
+const moment = require('moment');
 
 const app = express();
 app.use(cors());
@@ -148,10 +149,6 @@ resolve(result);
 });
 }
 
-
-
-
-
 app.post("/formGoster", (req, res) => {
 
     const user_id = req.body.id;
@@ -254,7 +251,7 @@ app.post("/formGoster", (req, res) => {
           ilce: addressResult[0].District,
           mahalle: addressResult[0].Neighborhood,
           Street: addressResult[0].Street,
-          apartNo: addressResult[0].ApartmentNumber,
+          apartno: addressResult[0].ApartmentNumber,
           zip: addressResult[0].PostCode,
           disability:disabilityResult[0].DisabilityName,
           why : disabilityResult[0].DisabilityStatus,
@@ -317,40 +314,8 @@ app.post('/password', (req, res) => {
   });
 });
 
-// const transporter = nodemailer.createTransport({
-//   service: 'Hotmail',
-//   auth: {
-//       user: 'birsezgiersoy@hotmail.com',
-//       pass: 'SezgiYekta2017*'
-//   }
-// });
-// app.post('/submit-form', function(req, res){
 
-//   var gonderenEmail = req.body.email;
-//   var mesaj = req.body.mesaj;
-//   var name = req.body.name;
-
-//   var mailOption = 
-//   {
-//       from: gonderenEmail,
-//       to: 'ofluoglusezgi@gmail.com',
-//       subject: "Erasmus Portal'dan Mesaj",
-//       text: "Gönderen: " + name + " Mesaj: " + mesaj
-//   }
-
-//   transporter.sendMail(mailOption, function(err, info){
-//       if(err) {
-//           console.error(err);
-//           res.status(500).send({ message: "Mesaj Gönderilemedi!" });
-//       } else {
-//           console.log("Mail gönderildi" + info.messageId);
-//           res.status(200).send({ message: "1", id: info.messageId });
-//       }
-//   });
-// });
-
-
-app.post('/guncelle', (req, res) => {
+app.post('/BasvuruGuncelle', (req, res) => {
   const {id,soyisim,isim,cinsiyet,tarih,telefon,tcNo,ulke,milliyet,ikinciMilliyet,il,ilce,mahalle,sokak,apartno,zip,why,disability,universite,fakulte,bolum,mezuniyet,mezuniyetTarih,not,cv,niyet,diploma,ingYetkin,ikametgah,pasaport} = req.body;
 
   const kontrolQuery ="SELECT * FROM usertable WHERE UserID =?";
@@ -391,7 +356,7 @@ app.post('/guncelle', (req, res) => {
             }
           }
       
-    })
+})
 });
 
 const PORT = process.env.PORT || 3001;
